@@ -1,0 +1,7 @@
+base   passwordgenerator
+author An-dir
+email  1.c-j@gmx.de
+date   2015-05-09
+name   Password Generator
+desc   Javascript Password Generator. Simply creates new password or validates selected text against complexity requirements and replaces selection with generated password if necessary. 
+url    https://www.dokuwiki.org/plugin:passwordgenerator
