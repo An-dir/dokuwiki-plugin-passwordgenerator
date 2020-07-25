@@ -1,18 +1,22 @@
 function addBtnActionPasswordgenerator($btn, props, edid) {
-    // initialize PWDGEN from https://jpvalappil.wordpress.com/2010/07/02/javascript-password-generator/
-	// with almost no changes
+    // base code for passwordgenerator was from https://jpvalappil.wordpress.com/2010/07/02/javascript-password-generator/
+
+    var removeSelection = JSINFO.plugin_passwordgenerator_removeSelection,
+        generator1Length = JSINFO.plugin_passwordgenerator_generator1Length;
 	function generatePassword(type, plen){
 	// content of spl again in regex some lines below!
-    var lwrAlph = "abcdefghijklmnopqrstuvwxyz",
-        uprAlph = "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-        nums = "0123456789",
-        spl = "!@#$%*()_=+,.:",
+    var lwrAlph = JSINFO.plugin_passwordgenerator_charset1,
+        uprAlph = JSINFO.plugin_passwordgenerator_charset2,
+        nums = JSINFO.plugin_passwordgenerator_charset3,
+        spl = JSINFO.plugin_passwordgenerator_charset4,
         passwd = [],
-        maxLen = 32,        
-        defLen = 8,
-        minLen = 5;     
+        maxLen = 2048,        
+        defLen = 10,
+        minLen = 1;     
  
-    /*Parameter Manipulations*/
+ 
+ 
+    /*Parameter Manipulations */
     type = type || "all";
     type = isNaN(type)?type.toLowerCase():"all";    
     plen = plen || defLen;
@@ -20,7 +24,6 @@ function addBtnActionPasswordgenerator($btn, props, edid) {
      
     /*Choosing the password source characters*/
     src = type === "alpha"? [lwrAlph, uprAlph]:type === "alphanum"?[lwrAlph, uprAlph, nums]:[lwrAlph, uprAlph, nums, spl];
-     
     /*Password construction*/      
     for (var i = 0; i < plen; i++) {
         var rnd = Math.floor(Math.random() * src.length),
@@ -43,11 +46,17 @@ function addBtnActionPasswordgenerator($btn, props, edid) {
 
     // is something selected?
         sample = selection.getText();
-        opts = {nosel: true};
+
+
+        if (removeSelection===1) {
+			opts = {nosel: true};
+		} else {
+			opts = {nosel: false};
+		};
 
 	// Generate password with atleast one of this chars and replace selection only not matching this expression
 	while (sample.search(/[!@#$%*()_=+,.:]/) < 0) {
-		sample = generatePassword('all',10);
+		sample = generatePassword('all',generator1Length);
 }
     pasteText(selection,sample,opts);
         return false;
