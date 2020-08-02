@@ -1,10 +1,23 @@
+var titlebartext = "PasswordGenerator";
+
+
+var removeSelection = JSINFO.plugin_passwordgenerator_removeSelection,
+    generator1Length = JSINFO.plugin_passwordgenerator_generator1Length,
+    selectioncache = "";
+
+if (removeSelection === 1) {
+		titlebartext = "Passwordgenerator (remove selection enabled): Generate a new password. If any text is selected a validation will be made and if necessary a new password will be generated.";
+} else {
+	titlebartext = "Passwordgenerator (remove selection disabled): Generate a new password. If any text is selected a validation will be made and if necessary a new password will be generated. When you click again and the selection still has the same value (generated or validated) you will get a new password.";
+}
+
+
 function addBtnActionPasswordgenerator($btn, props, edid) {
     // base code for passwordgenerator was from https://jpvalappil.wordpress.com/2010/07/02/javascript-password-generator/
 
-    var removeSelection = JSINFO.plugin_passwordgenerator_removeSelection,
-        generator1Length = JSINFO.plugin_passwordgenerator_generator1Length;
-	function generatePassword(type, plen){
-	// content of spl again in regex some lines below!
+        
+    function generatePassword(type, plen){
+    // content of spl again in regex some lines below!
     var lwrAlph = JSINFO.plugin_passwordgenerator_charset1,
         uprAlph = JSINFO.plugin_passwordgenerator_charset2,
         nums = JSINFO.plugin_passwordgenerator_charset3,
@@ -28,9 +41,9 @@ function addBtnActionPasswordgenerator($btn, props, edid) {
     for (var i = 0; i < plen; i++) {
         var rnd = Math.floor(Math.random() * src.length),
             charBuild = src[rnd].split("");          
-		/*force only one special char*/
-		if (rnd === 3) {src = [lwrAlph, uprAlph, nums]};
-			rnd = Math.floor(Math.random() * charBuild.length);
+        /*force only one special char*/
+        if (rnd === 3) {src = [lwrAlph, uprAlph, nums]};
+            rnd = Math.floor(Math.random() * charBuild.length);
         passwd.push(charBuild[rnd]);
     }
     return passwd.join("");
@@ -40,7 +53,7 @@ function addBtnActionPasswordgenerator($btn, props, edid) {
  
     $btn.click(function() {
         // your click handler
-	var opts;
+    var opts;
     var selection = DWgetSelection(jQuery('#'+edid)[0]);
 
 
@@ -49,19 +62,21 @@ function addBtnActionPasswordgenerator($btn, props, edid) {
 
 
         if (removeSelection===1) {
-			opts = {nosel: true};
-		} else {
-			opts = {nosel: false};
-		};
+            opts = {nosel: true};
+        } else {
+            opts = {nosel: false};
+            if (sample === selectioncache) {sample = "";}
+        };
 
-	// Generate password with atleast one of this chars and replace selection only not matching this expression
-	while (sample.search(/[!@#$%*()_=+,.:]/) < 0) {
-		sample = generatePassword('all',generator1Length);
+    // Generate password with atleast one of this chars and replace selection only not matching this expression
+    while (sample.search(/[!@#$%*()_=+,.:]/) < 0) {
+        sample = generatePassword('all',generator1Length);
 }
     pasteText(selection,sample,opts);
+    selectioncache = sample;
         return false;
     });
- 
+
     return 'click';
 }
  
@@ -69,8 +84,8 @@ function addBtnActionPasswordgenerator($btn, props, edid) {
 if (typeof window.toolbar !== 'undefined') {
     window.toolbar[window.toolbar.length] = {
         type: "passwordgenerator",
-        title: "PWD: Generate or replace password regarding complexity requirements",
-		key: "g",
+        title: titlebartext,
+        key: "g",
         icon: "../../plugins/passwordgenerator/toolbaricon_password.png"
     };
 }
