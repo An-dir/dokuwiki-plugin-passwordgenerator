@@ -1,4 +1,4 @@
-# PasswordGenerator Plugin ======
+# PasswordGenerator Plugin
 
 ## plugin
 description: Javascript Password Generator. Simply creates new password or validates selected text against complexity requirements and replaces selection with generated password if necessary. Password contains atleast some defined special chars.  
